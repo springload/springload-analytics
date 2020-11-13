@@ -1,0 +1,17 @@
+{
+  "name": "springload-analytics",
+  "version": "0.0.1",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "rollup src/index.js --file dist/index.js --format umd --name SpringloadAnalytics"
+  },
+  "dependencies": {
+    "@analytics/google-analytics": "^0.5.2",
+    "@analytics/perfumejs": "^0.2.0",
+    "analytics": "^0.5.5",
+    "perfume.js": "^5.3.0"
+  },
+  "devDependencies": {
+    "rollup": "^2.33.1"
+  }
+}
