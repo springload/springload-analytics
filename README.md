@@ -37,6 +37,26 @@ const analytics = SpringloadAnalytics({
 });
 ```
 
+## Performance metrics
+
+**Perfume.js** is a tiny, web performance monitoring library that reports field data back to your favorite analytics tool.
+`springload-analytics` sends performance metrics to Google Analytics using **perfume.js**.
+
+**Perfume.js** tracks the following performance mertrics:
+- Fist Paint (fp)
+- First Contentful Paint (fcp)
+- Largest Contentful Paint (lcp)
+- Largest Contentful Paint Final (lcpFinal)	
+- First Input Delay (fid)	
+- Cumulative Layout Shift (cls)	0-0.1	
+- Cumulative Layout Shift Final (clsFinal)	
+- Total Blocking Time (tbt)	
+- Total Blocking Time 5S (tbt5S)	
+- Total Blocking Time 10S (tbt10S)	
+- Total Blocking Time Final (tbtFinal)
+
+Performance tracking is enabled by default, it can be closed by passing the configuration option `trackPerformance: false` in the configuration object.
+
 ## API Reference
 
 ### Configuration
@@ -63,6 +83,10 @@ const analytics = SpringloadAnalytics({
     trackableEvent: 'hover'
 });
 ```
+
+### TrackScreenView
+
+
 
 ## Custom tracking
 
