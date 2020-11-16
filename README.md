@@ -44,7 +44,7 @@ const analytics = SpringloadAnalytics({
 
 **Perfume.js** tracks the following performance mertrics:
 
-- Fist Paint (fp)
+- First Paint (fp)
 - First Contentful Paint (fcp)
 - Largest Contentful Paint (lcp)
 - Largest Contentful Paint Final (lcpFinal)
