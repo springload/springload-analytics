@@ -11,8 +11,8 @@ This requires the async version of the Google Analytics snippet to be loaded in 
 ## Install
 
 ```bash
-npm install @springload/springload-analystics
-yarn add @springload/springload-analystics
+npm install @springload/springload-analytics
+yarn add @springload/springload-analytics
 ```
 
 ## Basic setup
