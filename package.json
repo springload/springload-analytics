@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "main": "dist/index.js",
   "scripts": {
-    "build": "rollup src/index.js --file dist/index.js --format umd --name SpringloadAnalytics"
+    "build": "tsc src/index.ts --outDir dist",
+    "doc": "typedoc --out docs src"
   },
   "dependencies": {
     "@analytics/google-analytics": "^0.5.2",
@@ -12,6 +13,6 @@
     "perfume.js": "^5.3.0"
   },
   "devDependencies": {
-    "rollup": "^2.33.1"
+    "typescript": "^4.0.5"
   }
 }

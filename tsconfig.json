@@ -1,0 +1,7 @@
+{
+    "module": "UMD",
+    "typedocOptions": {
+        "mode": "file",
+        "out": "docs"
+    }
+}
