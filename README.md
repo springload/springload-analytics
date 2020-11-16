@@ -56,7 +56,7 @@ const analytics = SpringloadAnalytics({
 - Total Blocking Time 10S (tbt10S)
 - Total Blocking Time Final (tbtFinal)
 
-Performance tracking is enabled by default, it can be closed by passing the configuration option `trackPerformance: false` in the configuration object.
+Performance tracking is enabled by default, it can be closed by passing the option `trackPerformance: false` in the configuration object.
 
 ## API Reference
 
@@ -69,7 +69,7 @@ After initialization with config, the core API is exposed & ready for use in the
 | trackingId         | `null`                  | The measurement ID / web property ID. The format is UA-XXXX-Y.                                                                                                                                                                          |
 | trackerName        | `null`                  | Custom tracker name for google analytics. Use this if you need multiple googleAnalytics scripts loaded.                                                                                                                                 |
 | category           | The pathname of the URI | Name of event category.                                                                                                                                                                                                                 |
-| separator          | `                       | `                                                                                                                                                                                                                                       | The charactor used to separate the content of `data-analytics` attribute into tracking variables `category`, `action`, `label` and `value`. |
+| separator          | `|` | The charactor used to separate the content of `data-analytics` attribute into tracking variables `category`, `action`, `label` and `value`. |
 | trackPerformance   | `true`                  | Toggle for tracking performance including these [metrics](https://github.com/zizzamia/perfume.js#web-vitals-score) by default.                                                                                                          |
 | trackableAttribute | `analytics`             | The attribute name following `data-` attached to the trackable elements.                                                                                                                                                                |
 | trackableEvent     | `click`                 | The event need to be tracked on trackable elements.                                                                                                                                                                                     |
