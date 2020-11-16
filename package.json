@@ -1,7 +1,21 @@
 {
-  "name": "springload-analytics",
+  "name": "@springload/springload-analytics",
   "version": "0.0.1",
   "main": "dist/index.js",
+  "description": "> Google analytics tracker inspired by springload-analytics.js.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/springload/springload-analytics.git"
+  },
+  "keywords": [
+    "analytics"
+  ],
+  "author": "yuzi.ma@springload.co.nz",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/springload/springload-analytics/issues"
+  },
+  "homepage": "https://github.com/springload/springload-analytics#readme",
   "scripts": {
     "build": "tsc src/index.ts --outDir dist",
     "doc": "typedoc --out docs src"
