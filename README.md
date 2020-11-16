@@ -66,16 +66,16 @@ After initialization with config, the core API is exposed & ready for use in the
 
 | Option             | Default                 | Description                                                                                                                                                                                                                             |
 | ------------------ | ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| trackingId         | `null`                  | The measurement ID / web property ID. The format is UA-XXXX-Y.                                                                                                                                                                          |
-| trackerName        | `null`                  | Custom tracker name for google analytics. Use this if you need multiple googleAnalytics scripts loaded.                                                                                                                                 |
+| trackingId         | null                    | The measurement ID / web property ID. The format is UA-XXXX-Y.                                                                                                                                                                          |
+| trackerName        | null                    | Custom tracker name for google analytics. Use this if you need multiple googleAnalytics scripts loaded.                                                                                                                                 |
 | category           | The pathname of the URI | Name of event category.                                                                                                                                                                                                                 |
-| separator          | '&#x7c;' | The charactor used to separate the content of `data-analytics` attribute into tracking variables `category`, `action`, `label` and `value`. |
-| trackPerformance   | `true`                  | Toggle for tracking performance including these [metrics](https://github.com/zizzamia/perfume.js#web-vitals-score) by default.                                                                                                          |
+| separator          | '&#x7c;'                | The charactor used to separate the content of `data-analytics` attribute into tracking variables `category`, `action`, `label` and `value`.                                                                                             |
+| trackPerformance   | true                    | Toggle for tracking performance including these [metrics](https://github.com/zizzamia/perfume.js#web-vitals-score) by default.                                                                                                          |
 | trackableAttribute | 'analytics'             | The attribute name following `data-` attached to the trackable elements.                                                                                                                                                                |
 | trackableEvent     | 'click'                 | The event need to be tracked on trackable elements.                                                                                                                                                                                     |
-| labelIsNextContent | true                  | Use element's text content as label if it's not specified in analytics attribute.                                                                                                                                                       |
-| labelAttribute     | `href`                  | Use this attribute as label if label is not specified in analytics attribute or element's text content when `labelIsNextContent` is true.                                                                                               |
-| googleTasks        | `{}`                    | An object used to customize how google analytics validates, constructs, and sends measurement protocol requests. See [set custom google analytic tasks](https://developers.google.com/analytics/devguides/collection/analyticsjs/tasks) |
+| labelIsNextContent | true                    | Use element's text content as label if it's not specified in analytics attribute.                                                                                                                                                       |
+| labelAttribute     | 'href'                  | Use this attribute as label if label is not specified in analytics attribute or element's text content when `labelIsNextContent` is true.                                                                                               |
+| googleTasks        | {}                      | An object used to customize how google analytics validates, constructs, and sends measurement protocol requests. See [set custom google analytic tasks](https://developers.google.com/analytics/devguides/collection/analyticsjs/tasks) |
 
 ```javascript
 const analytics = SpringloadAnalytics({
@@ -104,34 +104,40 @@ Trigger page view measurement calls in Google analytics. It's a equivalent to [`
 
 ```javascript
 // Basic page tracking
-analytics.page()
+analytics.page();
 
 // Page tracking with page data overrides
 analytics.page({
-  url: 'https://google.com'
-})
+  url: "https://google.com",
+});
 
 // Fire callback with 1st, 2nd or 3rd argument
 analytics.page(() => {
-  console.log('do this after page')
-})
+  console.log("do this after page");
+});
 
 // Disable sending this pageview to specific analytic tools
-analytics.page({}, {
-  plugins: {
-    // disable page tracking event for segment
-    segment: false
+analytics.page(
+  {},
+  {
+    plugins: {
+      // disable page tracking event for segment
+      segment: false,
+    },
   }
-})
+);
 
 // Send pageview to only to specific analytic tools
-analytics.page({}, {
-  plugins: {
-    // disable this specific page in all plugins except customerio
-    all: false,
-    customerio: true
+analytics.page(
+  {},
+  {
+    plugins: {
+      // disable this specific page in all plugins except customerio
+      all: false,
+      customerio: true,
+    },
   }
-})
+);
 ```
 
 ## Custom tracking
