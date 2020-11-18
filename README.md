@@ -92,7 +92,7 @@ const analytics = SpringloadAnalytics({
 });
 ```
 
-### TrackScreenView
+### Page
 
 Trigger page view measurement calls in Google analytics. It's a equivalent to [`analytics.page`](https://github.com/DavidWells/analytics#analyticspage).
 
@@ -116,27 +116,10 @@ analytics.page(() => {
   console.log("do this after page");
 });
 
-// Disable sending this pageview to specific analytic tools
-analytics.page(
-  {},
-  {
-    plugins: {
-      // disable page tracking event for segment
-      segment: false,
-    },
-  }
-);
-
 // Send pageview to only to specific analytic tools
 analytics.page(
   {},
-  {
-    plugins: {
-      // disable this specific page in all plugins except customerio
-      all: false,
-      customerio: true,
-    },
-  }
+  ['google-analytics'],
 );
 ```
 
