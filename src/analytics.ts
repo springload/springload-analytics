@@ -1,6 +1,4 @@
-import Perfume from "perfume.js";
 import Analytics from "analytics";
-import perfumePlugin from "@analytics/perfumejs";
 
 interface IAnalyticsOptions {
   category?: string;
@@ -28,7 +26,7 @@ interface ISetupTackablesOptions {
   trackableEvent?: keyof HTMLElementEventMap;
   labelIsNextContent?: boolean;
   labelAttribute?: string;
-  plugins?: { [P: string]: boolean };
+  sendTo?: Array<string>;
 }
 
 /**
@@ -50,7 +48,6 @@ function SpringloadAnalytics({
 }: IAnalyticsOptions) {
   const DEFAULT_CATEGORY = "/" + document.location.pathname.substr(1);
   const DEFAULT_SEPARATOR = "|";
-  const DEFAULT_TRACK_PERFORMANCE = true;
   const DEFAULT_TRACKABLE_ATTRIBUTE = "analytics";
   const DEFAULT_TRACKABLE_EVENT: keyof HTMLElementEventMap = "click";
   const DEFAULT_LABEL_ATTRIBUTE = "href";
@@ -60,7 +57,6 @@ function SpringloadAnalytics({
   const options = {
     category: DEFAULT_CATEGORY,
     separator: DEFAULT_SEPARATOR,
-    trackPerformance: DEFAULT_TRACK_PERFORMANCE,
     trackableAttribute: DEFAULT_TRACKABLE_ATTRIBUTE,
     trackableEvent: DEFAULT_TRACKABLE_EVENT,
     labelAttribute: DEFAULT_LABEL_ATTRIBUTE,
@@ -68,24 +64,6 @@ function SpringloadAnalytics({
     plugins: DEFAULT_ENABLED_PLUGINS,
     ...overrideOptions,
   };
-
-  // Track performance metrics
-  if (options.trackPerformance) {
-    trackerPlugins.push(
-      perfumePlugin({
-        perfume: Perfume,
-        category: "perfMetrics",
-        destinations: {
-          all: true,
-        },
-        perfumeOptions: {
-          resourceTiming: true,
-          elementTiming: true,
-          maxMeasureTime: 15000,
-        },
-      })
-    );
-  }
 
   const analytics = Analytics({
     app: "springload-analytics",
@@ -123,6 +101,8 @@ function SpringloadAnalytics({
    * @property {string}  [options.trackableAttribute="analytics"]
    * @property {string}  [options.trackableEvent="click"]
    * @property {boolean} [options.labelIsNextContent]
+   * @property {string}  [options.labelAttribute]
+   * @property {array}  [options.sendTo]
    */
   const setupTrackables = ({
     separator,
@@ -130,7 +110,7 @@ function SpringloadAnalytics({
     trackableEvent,
     labelIsNextContent,
     labelAttribute,
-    plugins,
+    sendTo,
   }: ISetupTackablesOptions = options) => {
     // Only supporting modern browsers for selection
     if (document.querySelectorAll) {
@@ -158,7 +138,7 @@ function SpringloadAnalytics({
               label,
               value,
             },
-            { plugins }
+            sendTo
           );
         });
       });
@@ -198,7 +178,7 @@ function SpringloadAnalytics({
       return element.getAttribute(attribute);
     }
     return element.parentNode
-      ? getElementTrackingData((element.parentNode) as Element, attribute)
+      ? getElementTrackingData(element.parentNode as Element, attribute)
       : "";
   };
 
@@ -207,17 +187,14 @@ function SpringloadAnalytics({
    *
    * @param {string} action - Event action
    * @param {object} payload - Event data
-   * @param {object} trackOptions - Event tracking options
+   * @param {object} [sendTo] - Tracker list that will accept this event
    */
-  const track = (
-    action: string,
-    payload: any,
-    trackOptions?: { 
-      plugins?: { [P: string]: boolean } 
-    }
-  ) => {
+  const track = (action: string, payload: any, sendTo?: Array<string>) => {
+    const plugins = Array.isArray(sendTo)
+        ? sendTo.reduce((acc, tracker) => ({ ...acc, [tracker]: true }), {})
+        : { all: true };
     payload.category = payload.category || options.category;
-    analytics.track(action, payload, trackOptions);
+    analytics.track(action, payload, { plugins });
   };
 
   return {
