@@ -11,18 +11,16 @@ function tecPlugin(pluginConfig: ITecPluginConfig) {
     track: ({ payload, config }) => {
       const { trackerUrl, applicationVersion, customPayloadKey } = config;
       const { properties, event } = payload;
+      const { label: eventLabel } = properties;
       const eventData = properties[customPayloadKey || 'value'];
-      if (!Array.isArray(eventData)) {
-        console.error(`The ${customPayloadKey || 'value'} in the track playload must be an Array.`);
-        return;
-      }
       const trackInfo = {
         sessionId: window.sessionStorage.getItem("sessionId"),
         applicationVersion,
         timestamp: new Date().toISOString(),
         url: window.location.pathname + window.location.search,
         eventName: event,
-        payload: eventData,
+        eventLabel,
+        eventData,
       };
       fetch(trackerUrl, {
         method: "POST",
