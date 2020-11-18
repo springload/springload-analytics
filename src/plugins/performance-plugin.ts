@@ -1,5 +1,5 @@
-import Perfume from "perfume.js";
-import perfumePlugin from "@analytics/perfumejs";
+import Perfume from 'perfume.js';
+import perfumePlugin from '@analytics/perfumejs';
 
 // Track performance metrics
 const performancePlugin = ({ sendTo }) => {
@@ -8,7 +8,7 @@ const performancePlugin = ({ sendTo }) => {
     : { all: true };
   return perfumePlugin({
     perfume: Perfume,
-    category: "perfMetrics",
+    category: 'perfMetrics',
     destinations,
     perfumeOptions: {
       resourceTiming: true,

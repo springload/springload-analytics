@@ -1,2 +1,2 @@
-export * from "./plugins";
-export * from "./analytics";
+export * from './plugins';
+export * from './springload-analytics';

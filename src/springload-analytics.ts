@@ -1,4 +1,4 @@
-import Analytics from "analytics";
+import Analytics from 'analytics';
 
 interface IAnalyticsOptions {
   category?: string;
@@ -46,11 +46,11 @@ function SpringloadAnalytics({
   trackerPlugins,
   ...overrideOptions
 }: IAnalyticsOptions) {
-  const DEFAULT_CATEGORY = "/" + document.location.pathname.substr(1);
-  const DEFAULT_SEPARATOR = "|";
-  const DEFAULT_TRACKABLE_ATTRIBUTE = "analytics";
-  const DEFAULT_TRACKABLE_EVENT: keyof HTMLElementEventMap = "click";
-  const DEFAULT_LABEL_ATTRIBUTE = "href";
+  const DEFAULT_CATEGORY = '/' + document.location.pathname.substr(1);
+  const DEFAULT_SEPARATOR = '|';
+  const DEFAULT_TRACKABLE_ATTRIBUTE = 'analytics';
+  const DEFAULT_TRACKABLE_EVENT: keyof HTMLElementEventMap = 'click';
+  const DEFAULT_LABEL_ATTRIBUTE = 'href';
   const DEFAULT_LABEL_IS_NEXT_CONTENT = true;
   const DEFAULT_ENABLED_PLUGINS = { all: true };
 
@@ -66,7 +66,7 @@ function SpringloadAnalytics({
   };
 
   const analytics = Analytics({
-    app: "springload-analytics",
+    app: 'springload-analytics',
     plugins: trackerPlugins,
   });
 
@@ -160,12 +160,12 @@ function SpringloadAnalytics({
     event: keyof HTMLElementEventMap,
     callback: EventListenerOrEventListenerObject
   ) => {
-    if ("addEventListener" in window) {
+    if ('addEventListener' in window) {
       element.addEventListener(event, callback, false);
-    } else if ("attachEvent" in window) {
-      (<any>element).attachEvent("on" + event, callback);
+    } else if ('attachEvent' in window) {
+      (<any>element).attachEvent('on' + event, callback);
     } else {
-      element["on" + event] = callback;
+      element['on' + event] = callback;
     }
   };
 
@@ -182,7 +182,7 @@ function SpringloadAnalytics({
     }
     return element.parentNode
       ? getElementTrackingData(element.parentNode as Element, attribute)
-      : "";
+      : '';
   };
 
   /**
