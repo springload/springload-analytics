@@ -23,6 +23,7 @@
   "dependencies": {
     "@analytics/google-analytics": "^0.5.2",
     "@analytics/perfumejs": "^0.2.0",
+    "@analytics/storage-utils": "^0.2.4",
     "analytics": "^0.5.5",
     "perfume.js": "^5.3.0"
   },

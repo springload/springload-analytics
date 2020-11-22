@@ -1,3 +1,5 @@
+import { getItem, removeItem, setItem } from '@analytics/storage-utils';
+
 interface ITecPluginConfig {
   trackerUrl: string;
   applicationVersion: string;
@@ -9,18 +11,18 @@ function isTimeout(createdAt: string, validity: number) {
 };
 
 function clearStorage() {
-  window.localStorage.removeItem('sessionId');
-  window.localStorage.removeItem('createdAt');
-  window.localStorage.removeItem('sessions');
+  removeItem('sessionId');
+  removeItem('createdAt');
+  removeItem('sessions');
 };
 
 function createNewIdentity() {
   const arr = new Uint8Array(10);
   window.crypto.getRandomValues(arr);
-
-  window.localStorage.setItem('sessions', '1');
-  window.localStorage.setItem('createdAt', new Date().getTime().toString());
-  window.localStorage.setItem('sessionId', Array.from(arr, dec2hex).join(''));
+  
+  setItem('sessions', '1');
+  setItem('createdAt', new Date().getTime().toString());
+  setItem('sessionId', Array.from(arr, dec2hex).join(''));
 };
 
 // dec2hex :: Integer -> String
@@ -56,15 +58,15 @@ function tecPlugin(pluginConfig: ITecPluginConfig) {
       });
     },
     identify: () => {
-      const sessionId = window.localStorage.getItem('sessionId');
-      const createdAt = window.localStorage.getItem('createdAt');
-      let sessions = Number(window.localStorage.getItem('sessions'));
+      const sessionId = getItem('sessionId');
+      const createdAt = getItem('createdAt');
+      let sessions = Number(getItem('sessions'));
 
       // Session times increment
-      if (!window.sessionStorage.getItem('existingSession')) {
+      if (!getItem('existingSession', 'sessionStorage')) {
         // New session
-        window.localStorage.setItem('sessions', (++sessions).toString());
-        window.sessionStorage.setItem('existingSession', 'true');
+        setItem('sessions', (++sessions).toString());
+        setItem('existingSession', 'true', 'sessionStorage');
       }
 
       if (sessionId && createdAt) {
