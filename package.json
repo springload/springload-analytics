@@ -25,7 +25,8 @@
     "@analytics/perfumejs": "^0.2.0",
     "@analytics/storage-utils": "^0.2.4",
     "analytics": "^0.5.5",
-    "perfume.js": "^5.3.0"
+    "perfume.js": "^5.3.0",
+    "uuid": "^8.3.1"
   },
   "devDependencies": {
     "typescript": "^4.0.5"

@@ -1,4 +1,5 @@
 import { getItem, removeItem, setItem } from '@analytics/storage-utils';
+import { v4 as uuidv4 } from 'uuid';
 
 interface ITecPluginConfig {
   trackerUrl: string;
@@ -17,21 +18,12 @@ function clearStorage() {
 };
 
 function createNewIdentity() {
-  const arr = new Uint8Array(10);
-  window.crypto.getRandomValues(arr);
+  const uuid = uuidv4();
   
   setItem('sessions', '1');
   setItem('createdAt', new Date().getTime().toString());
-  setItem('sessionId', Array.from(arr, dec2hex).join(''));
+  setItem('sessionId', uuid);
 };
-
-// dec2hex :: Integer -> String
-// i.e. 0-255 -> '00'-'ff'
-function dec2hex(dec) {
-  return dec < 10
-    ? '0' + String(dec)
-    : dec.toString(16)
-}
 
 function tecPlugin(pluginConfig: ITecPluginConfig) {
   return {
