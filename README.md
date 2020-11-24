@@ -85,13 +85,10 @@ After initialization with config, the core API is exposed & ready for use in the
 
 | Option             | Default                 | Description                                                                                                                                                                                                                             |
 | ------------------ | ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| category           | The pathname of the URI | Name of event category.                                                                                                                                                                                                                 |
 | separator          | '&#x7c;'                | The charactor used to separate the content of `data-analytics` attribute into tracking variables `category`, `action`, `label` and `value`.                                                                                             |
 | trackPerformance   | true                    | Toggle for tracking performance including these [metrics](https://github.com/zizzamia/perfume.js#web-vitals-score) by default.                                                                                                          |
 | trackableAttribute | 'analytics'             | The attribute name following `data-` attached to the trackable elements.                                                                                                                                                                |
 | trackableEvent     | 'click'                 | The event need to be tracked on trackable elements.                                                                                                                                                                                     |
-| labelIsNextContent | true                    | Use element's text content as label if it's not specified in analytics attribute.                                                                                                                                                       |
-| labelAttribute     | 'href'                  | Use this attribute as label if label is not specified in analytics attribute or element's text content when `labelIsNextContent` is true.                                                                                               |
 
 ```javascript
 const analytics = SpringloadAnalytics({
@@ -174,8 +171,8 @@ You can track within a JavaScript file by calling the track method:
 // Specify action and payload.
 analytics.track(action, {
   label, 
-  category,
   value,
+  category,
 });
 
 // Not specify category will use default category.
@@ -197,11 +194,11 @@ You can set up additional/alternative trackable elements on the fly by calling `
 
 ```javascript
 analytics.setupTrackables({
-  separator: ":",
   trackableAttribute: "google-analytics",
   trackableEvent: "mouseenter",
-  labelIsNextContent: false,
-  labelAttribute: "data-label",
+  separator: ":",
+  action: "hover read more",
+  payloadKeys: ["page", "section"],
   sendTo: ['google-analytics'], // Not specific it will send to all trackers
 });
 ```
@@ -209,7 +206,7 @@ analytics.setupTrackables({
 The markup for this example would be:
 
 ```html
-<div data-analytics="home">
-  <span data-label="Viewed on hover">Read more</span>
+<div data-google-analytics="home:header">
+  <span>Read more</span>
 </div>
 ```
