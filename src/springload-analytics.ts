@@ -1,13 +1,10 @@
 import Analytics from 'analytics';
 
 interface IAnalyticsOptions {
-  category?: string;
   separator?: string;
   trackPerformance?: boolean;
   trackableAttribute?: string;
   trackableEvent?: keyof HTMLElementEventMap;
-  labelAttribute?: string;
-  labelIsNextContent?: boolean;
   trackerPlugins?: Array<any>;
 }
 
@@ -21,11 +18,11 @@ interface IPageData {
 }
 
 interface ISetupTackablesOptions {
+  action: string;
   separator?: string;
+  payloadKeys: Array<string>;
   trackableAttribute?: string;
   trackableEvent?: keyof HTMLElementEventMap;
-  labelIsNextContent?: boolean;
-  labelAttribute?: string;
   sendTo?: Array<string>;
 }
 
@@ -46,21 +43,19 @@ function SpringloadAnalytics({
   trackerPlugins,
   ...overrideOptions
 }: IAnalyticsOptions) {
-  const DEFAULT_CATEGORY = '/' + document.location.pathname.substr(1);
+  const DEFAULT_ACTION = 'click';
   const DEFAULT_SEPARATOR = '|';
+  const DEFAULT_PAYLOAD_KEYS = [];
   const DEFAULT_TRACKABLE_ATTRIBUTE = 'analytics';
   const DEFAULT_TRACKABLE_EVENT: keyof HTMLElementEventMap = 'click';
-  const DEFAULT_LABEL_ATTRIBUTE = 'href';
-  const DEFAULT_LABEL_IS_NEXT_CONTENT = true;
   const DEFAULT_ENABLED_PLUGINS = { all: true };
 
   const options = {
-    category: DEFAULT_CATEGORY,
+    action: DEFAULT_ACTION,
     separator: DEFAULT_SEPARATOR,
+    payloadKeys: DEFAULT_PAYLOAD_KEYS,
     trackableAttribute: DEFAULT_TRACKABLE_ATTRIBUTE,
     trackableEvent: DEFAULT_TRACKABLE_EVENT,
-    labelAttribute: DEFAULT_LABEL_ATTRIBUTE,
-    labelIsNextContent: DEFAULT_LABEL_IS_NEXT_CONTENT,
     plugins: DEFAULT_ENABLED_PLUGINS,
     ...overrideOptions,
   };
@@ -85,8 +80,8 @@ function SpringloadAnalytics({
   function page(pageData?: IPageData | Function): void;
   function page(pageData: IPageData, sendTo?): void {
     const plugins = Array.isArray(sendTo)
-        ? sendTo.reduce((acc, tracker) => ({ ...acc, [tracker]: true }), {})
-        : { all: true };
+      ? sendTo.reduce((acc, tracker) => ({ ...acc, [tracker]: true }), {})
+      : { all: true };
     if (!pageData) {
       analytics.page();
     } else if (!options) {
@@ -108,11 +103,11 @@ function SpringloadAnalytics({
    * @property {array}  [options.sendTo]
    */
   const setupTrackables = ({
+    action,
     separator,
+    payloadKeys,
     trackableAttribute,
     trackableEvent,
-    labelIsNextContent,
-    labelAttribute,
     sendTo,
   }: ISetupTackablesOptions = options) => {
     // Only supporting modern browsers for selection
@@ -123,26 +118,16 @@ function SpringloadAnalytics({
       elements.forEach((el) => {
         // Grab the values from the data attribute
         const params = getElementTrackingData(el, `data-${trackableAttribute}`);
-
-        // Set the event tracking variables
-        let [category, action, label, value] = params.split(separator);
-        label =
-          label !== undefined && label !== ""
-            ? label
-            : labelIsNextContent
-            ? el.textContent
-            : el.getAttribute(labelAttribute);
+        const payload = params.split(separator).reduce(
+          (acc, param = null, index) => ({
+            [payloadKeys[index]]: JSON.parse(param),
+            ...acc,
+          }),
+          {}
+        );
 
         on(el, trackableEvent, () => {
-          track(
-            action,
-            {
-              category,
-              label,
-              value,
-            },
-            sendTo
-          );
+          track(action, payload, sendTo);
         });
       });
     }
@@ -194,9 +179,8 @@ function SpringloadAnalytics({
    */
   const track = (action: string, payload: any, sendTo?: Array<string>) => {
     const plugins = Array.isArray(sendTo)
-        ? sendTo.reduce((acc, tracker) => ({ ...acc, [tracker]: true }), {})
-        : { all: true };
-    payload.category = payload.category || options.category;
+      ? sendTo.reduce((acc, tracker) => ({ ...acc, [tracker]: true }), {})
+      : { all: true };
     analytics.track(action, payload, { plugins });
   };
 

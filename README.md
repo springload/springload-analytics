@@ -13,18 +13,6 @@ yarn add @springload/springload-analytics
 
 ## Basic setup
 
-Just add a data-analytics attribute to a container with links you want to track. Every link in that container will be tracked using the default category (uri), default action (click), default label (href), and default value (undefined).
-
-```html
-<div data-analytics>
-  <ul>
-    <li><a href="/">Home</a></li>
-    <li><a href="/about-us/">About us</a></li>
-    <li><a href="/contact-us/">Contact us</a></li>
-  </ul>
-</div>
-```
-
 ```javascript
 import SpringloadAnalytics, { googleAnalyticsPlugin, tecPlugin } from "springload-analytics";
 
@@ -41,7 +29,7 @@ const analytics = SpringloadAnalytics({
 });
 ```
 
-The built-in google analytics tracker now is replaced by manually passsing tracker plugins in to initialization function which allow users to customize their own tracker based on project requirement. 
+The built-in google analytics tracker now is replaced by manually passsing tracker plugins in to initialization function which allow users to customize their own tracker based on project requirement.
 
 ## Performance metrics
 
@@ -71,9 +59,9 @@ const analytics = SpringloadAnalytics({
   trackerPlugins: [
     // ...other tracker plugins
     performancePlugin({
-      sendTo: ["google-analytics"]
+      sendTo: ["google-analytics"],
     }),
-  ]
+  ],
 });
 ```
 
@@ -83,19 +71,19 @@ const analytics = SpringloadAnalytics({
 
 After initialization with config, the core API is exposed & ready for use in the application.
 
-| Option             | Default                 | Description                                                                                                                                                                                                                             |
-| ------------------ | ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| separator          | '&#x7c;'                | The charactor used to separate the content of `data-analytics` attribute into tracking variables `category`, `action`, `label` and `value`.                                                                                             |
-| trackPerformance   | true                    | Toggle for tracking performance including these [metrics](https://github.com/zizzamia/perfume.js#web-vitals-score) by default.                                                                                                          |
-| trackableAttribute | 'analytics'             | The attribute name following `data-` attached to the trackable elements.                                                                                                                                                                |
-| trackableEvent     | 'click'                 | The event need to be tracked on trackable elements.                                                                                                                                                                                     |
+| Option             | Default     | Description                                                                                                                                 |
+| ------------------ | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| separator          | '&#x7c;'    | The charactor used to separate the content of `data-analytics` attribute into tracking variables `category`, `action`, `label` and `value`. |
+| trackableAttribute | 'analytics' | The attribute name following `data-` attached to the trackable elements.                                                                    |
+| trackableEvent     | 'click'     | The event need to be tracked on trackable elements.                                                                                         |
+| payloadKeys        | `[]`        | The property keys array that related to the values in the same sequence in trackable attribute separated by separator.                      |
 
 ```javascript
 const analytics = SpringloadAnalytics({
-    category: "my-website",
-    separator: ":"
-    trackPerformance: false,
-    trackableEvent: "hover",
+  separator: ":"
+  trackableAttribute: "sp-analytics",
+  trackableEvent: "hover",
+  payloadKeys: ["label", "data"]
 });
 ```
 
@@ -124,37 +112,38 @@ analytics.page(() => {
 });
 
 // Send pageview to only to specific analytic tools
-analytics.page(
-  {},
-  ['google-analytics'],
-);
+analytics.page({}, ["google-analytics"]);
 ```
 
 ## Custom tracking
 
-For more targeted tracking you can specify a category, action or value by populating the data-analytics attribute with pipe (|) separated values.
+For more targeted tracking you can specify event data by populating the data-analytics attribute with pipe (|) separated values.
+
+```javascript
+analytics.setupTrackables({
+  action: "Link click",
+  payloadKeys: ["category", "label", "value"],
+});
+```
 
 ```html
-<!-- E.g. Use custom category, custom action, custom label and a custom value -->
-<a data-analytics="Top navigation|Link click|Homepage link|1" href="/">Home</a>
+<!-- E.g. Use custom category, custom label and a custom value -->
+<a data-analytics="Top navigation|Homepage link|1" href="/">Home</a>
 
 <!-- E.g. Use custom label only -->
-<a data-analytics="||Homepage link" href="/">Home</a>
-
-<!-- E.g. Use custom action only -->
-<a data-analytics="|Slide Next" href="#">Next</a>
+<a data-analytics="|Homepage link" href="/">Home</a>
 
 <!-- E.g. Use custom value only -->
-<a data-analytics="|||1" href="/">Home</a>
+<a data-analytics="||1" href="/">Home</a>
 
 <!-- E.g. Use custom category and custom label only -->
-<a data-analytics="UI Elements||Show data" href="#">Show</a>
+<a data-analytics="UI Elements|Show data" href="#">Show</a>
 
 <!-- E.g. Use custom category and custom value only -->
-<a data-analytics="UI Elements|||1" href="#">Show</a>
+<a data-analytics="UI Elements||1" href="#">Show</a>
 
 <!-- E.g. Custom track a group of elements with custom category and action -->
-<div data-analytics="Top navigation|Link click">
+<div data-analytics="Top navigation">
   <ul>
     <li><a href="/">Home</a></li>
     <li><a href="/about-us/">About us</a></li>
@@ -165,27 +154,25 @@ For more targeted tracking you can specify a category, action or value by popula
 
 ## Tracking dynamically
 
-You can track within a JavaScript file by calling the track method:
+You can track within a JavaScript file by calling the track method, just specify the action and pass the event data which will be sent to trackers:
 
 ```javascript
 // Specify action and payload.
 analytics.track(action, {
-  label, 
+  label,
   value,
   category,
 });
 
-// Not specify category will use default category.
-analytics.track(action, {
-  label, 
-  value,
-});
-
 // Specify the trackers that will receive the payload, by default it'll be sent to all tracker.
-analytics.track(action, {
-  label, 
-  value,
-}, ['tec']);
+analytics.track(
+  action,
+  {
+    label,
+    data,
+  },
+  ["tec"]
+);
 ```
 
 ## Setup additional trackable elements on the fly
@@ -199,7 +186,7 @@ analytics.setupTrackables({
   separator: ":",
   action: "hover read more",
   payloadKeys: ["page", "section"],
-  sendTo: ['google-analytics'], // Not specific it will send to all trackers
+  sendTo: ["google-analytics"], // Not specific it will send to all trackers
 });
 ```
 
