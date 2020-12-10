@@ -18,7 +18,9 @@
   },
   "homepage": "https://github.com/springload/springload-analytics#readme",
   "scripts": {
-    "build": "tsc --outDir dist",
+    "build": "npm run build:esm && npm run build:umd",
+    "build:esm": "tsc --outDir dist/esm",
+    "build:umd": "tsc --module umd --outDir dist",
     "doc": "typedoc --out docs src"
   },
   "dependencies": {

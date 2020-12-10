@@ -8,21 +8,21 @@ export interface IAnalyticsOptions {
   trackerPlugins?: Array<any>;
 }
 
-interface IPageData {
+type PageData = {
   title?: string;
   url?: string;
   path?: string;
   search?: string;
   width?: string;
   height?: string;
-}
+};
 
 interface ISetupTackablesOptions {
   action: string;
   separator?: string;
   payloadKeys: Array<string>;
   trackableAttribute?: string;
-  trackableEvent: keyof HTMLElementEventMap;
+  trackableEvent?: keyof HTMLElementEventMap;
   sendTo?: Array<string>;
 }
 
@@ -108,18 +108,19 @@ export const track = (action: string, payload: any, sendTo?: Array<string>) => {
  */
 export const setupTrackables = ({
   action,
-  separator,
+  separator = options.separator,
   payloadKeys,
-  trackableAttribute,
-  trackableEvent,
+  trackableAttribute = options.trackableAttribute,
+  trackableEvent = options.trackableEvent,
   sendTo,
-}: ISetupTackablesOptions = options) => {
+}: ISetupTackablesOptions) => {
   // Only supporting modern browsers for selection
   if (document.querySelectorAll) {
     const elements = document.querySelectorAll(`[data-${trackableAttribute}]`);
     elements.forEach((el) => {
       // Grab the values from the data attribute
       const params = getElementTrackingData(el, `data-${trackableAttribute}`);
+      if (!params) return;
       const payload = params.split(separator).reduce(
         (acc: any, param = '', index: number) => ({
           [payloadKeys[index]]: JSON.parse(param),
@@ -147,23 +148,20 @@ export const setupTrackables = ({
  * @property {string} [pageData.height] - Page height
  * @param {array} [sendTo] - Tracker list that will accept this event
  */
-export function page(pageData?: IPageData | Function): void;
-export function page(pageData: IPageData, sendTo?: string[]): void {
+export function page(data?: PageData, callback?: (...params: any[]) => any, sendTo?: string[]): void {
   const plugins = Array.isArray(sendTo)
     ? sendTo.reduce((acc, tracker) => ({ ...acc, [tracker]: true }), {})
     : { all: true };
   withAnalytics((analytics: AnalyticsInstance) => {
-    if (!pageData) {
-      analytics.page();
-    } else if (!plugins) {
-      analytics.page(pageData);
+    if (!plugins) {
+      analytics.page(data, null, callback);
     } else {
-      analytics.page(pageData, { plugins });
+      analytics.page(data, { plugins }, callback );
     }
   });
 }
 
-export const identify = ({ userId, ...args }: { userId: string }) => {
+export const identify = (userId: string, ...args: any[]) => {
   withAnalytics((analytics: AnalyticsInstance) =>
     analytics.identify(userId, ...args)
   );
