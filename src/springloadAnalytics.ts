@@ -1,4 +1,4 @@
-import Analytics from 'analytics';
+import Analytics, { AnalyticsInstance } from 'analytics';
 
 export interface IAnalyticsOptions {
   debug?: boolean;
@@ -22,13 +22,13 @@ interface ISetupTackablesOptions {
   separator?: string;
   payloadKeys: Array<string>;
   trackableAttribute?: string;
-  trackableEvent?: keyof HTMLElementEventMap;
+  trackableEvent: keyof HTMLElementEventMap;
   sendTo?: Array<string>;
 }
 
 const DEFAULT_ACTION = 'click';
 const DEFAULT_SEPARATOR = '|';
-const DEFAULT_PAYLOAD_KEYS = [];
+const DEFAULT_PAYLOAD_KEYS: string[] = [];
 const DEFAULT_TRACKABLE_ATTRIBUTE = 'analytics';
 const DEFAULT_TRACKABLE_EVENT: keyof HTMLElementEventMap = 'click';
 const DEFAULT_ENABLED_PLUGINS = { all: true };
@@ -42,11 +42,13 @@ let options: any = {
   plugins: DEFAULT_ENABLED_PLUGINS,
 };
 
-let analyInstance = null;
+let analyInstance: any = null;
 
-function withAnalytics(callback) {
+function withAnalytics(callback: Function) {
   if (!analyInstance) {
-    console.warn(`Couldn't apply tracing hooks, make sure you call Sentry.init before initialzing Vue!`)
+    console.warn(
+      `Couldn't apply tracing hooks, make sure you call Sentry.init before initialzing Vue!`
+    );
   }
   callback(analyInstance);
 }
@@ -88,7 +90,7 @@ export const track = (action: string, payload: any, sendTo?: Array<string>) => {
   const plugins = Array.isArray(sendTo)
     ? sendTo.reduce((acc, tracker) => ({ ...acc, [tracker]: true }), {})
     : { all: true };
-  withAnalytics((analytics) => {
+  withAnalytics((analytics: AnalyticsInstance) => {
     analytics.track(action, payload, { plugins });
   });
 };
@@ -119,7 +121,7 @@ export const setupTrackables = ({
       // Grab the values from the data attribute
       const params = getElementTrackingData(el, `data-${trackableAttribute}`);
       const payload = params.split(separator).reduce(
-        (acc, param = null, index) => ({
+        (acc: any, param = '', index: number) => ({
           [payloadKeys[index]]: JSON.parse(param),
           ...acc,
         }),
@@ -146,11 +148,11 @@ export const setupTrackables = ({
  * @param {array} [sendTo] - Tracker list that will accept this event
  */
 export function page(pageData?: IPageData | Function): void;
-export function page(pageData: IPageData, sendTo?): void {
+export function page(pageData: IPageData, sendTo?: string[]): void {
   const plugins = Array.isArray(sendTo)
     ? sendTo.reduce((acc, tracker) => ({ ...acc, [tracker]: true }), {})
     : { all: true };
-  withAnalytics((analytics) => {
+  withAnalytics((analytics: AnalyticsInstance) => {
     if (!pageData) {
       analytics.page();
     } else if (!plugins) {
@@ -161,8 +163,10 @@ export function page(pageData: IPageData, sendTo?): void {
   });
 }
 
-export const identify = (...args) => {
-  withAnalytics((analytics) => analytics.identify(...args));
+export const identify = ({ userId, ...args }: { userId: string }) => {
+  withAnalytics((analytics: AnalyticsInstance) =>
+    analytics.identify(userId, ...args)
+  );
 };
 
 /**
@@ -172,7 +176,7 @@ export const identify = (...args) => {
  * @param {string} attribute
  * @returns {string}
  */
-const getElementTrackingData = (element: Element, attribute: string) => {
+const getElementTrackingData = (element: Element, attribute: string): string | null => {
   if (element.hasAttribute(attribute) && element.getAttribute(attribute)) {
     return element.getAttribute(attribute);
   }
@@ -198,6 +202,6 @@ const on = (
   } else if ('attachEvent' in window) {
     (<any>element).attachEvent('on' + event, callback);
   } else {
-    element['on' + event] = callback;
+    (element as any)['on' + event] = callback;
   }
 };

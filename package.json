@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/springload/springload-analytics#readme",
   "scripts": {
-    "build": "tsc src/index.ts --outDir dist",
+    "build": "tsc --outDir dist",
     "doc": "typedoc --out docs src"
   },
   "dependencies": {

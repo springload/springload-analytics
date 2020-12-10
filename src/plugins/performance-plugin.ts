@@ -2,7 +2,7 @@ import Perfume from 'perfume.js';
 import perfumePlugin from '@analytics/perfumejs';
 
 // Track performance metrics
-const performancePlugin = ({ sendTo }) => {
+const performancePlugin = ({ sendTo }: { sendTo?: string[]}) => {
   const destinations = Array.isArray(sendTo)
     ? sendTo.reduce((acc, tracker) => ({ ...acc, [tracker]: true }), {})
     : { all: true };

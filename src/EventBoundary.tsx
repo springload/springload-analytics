@@ -14,9 +14,9 @@ const EventBoundary = ({ event, action, payload, sendTo, children }: IEventBound
     if (!React.isValidElement(element)) return
     
     const eventPropName = `on${event.charAt(0).toUpperCase() + event.slice(1)}`;
-    const eventHandler = (event) => {
-      if (element.props[eventPropName]) {
-        element.props[eventPropName](event);
+    const eventHandler = (event: React.SyntheticEvent) => {
+      if ((element.props as any)[eventPropName]) {
+        (element.props as any)[eventPropName](event);
       }
       payload = (typeof payload === 'function') ? payload() : payload;
       track(action, payload, sendTo);
