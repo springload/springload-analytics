@@ -73,7 +73,7 @@ After initialization with config, the core API is exposed & ready for use in the
 
 | Option             | Default     | Description                                                                                                                                 |
 | ------------------ | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| separator          | '&#x7c;'    | The charactor used to separate the content of `data-analytics` attribute into tracking variables `category`, `action`, `label` and `value`. |
+| separator          | '&#x7c;'    | The charactor used to separate the content of `data-analytics` attribute into tracking variables `category`, `event`, `label` and `value`. |
 | trackableAttribute | 'analytics' | The attribute name following `data-` attached to the trackable elements.                                                                    |
 | trackableEvent     | 'click'     | The event need to be tracked on trackable elements.                                                                                         |
 | payloadKeys        | `[]`        | The property keys array that related to the values in the same sequence in trackable attribute separated by separator.                      |
@@ -121,7 +121,7 @@ For more targeted tracking you can specify event data by populating the data-ana
 
 ```javascript
 SpringloadAnalytics.setupTrackables({
-  action: "Link click",
+  event: "Link click",
   payloadKeys: ["category", "label", "value"],
 });
 ```
@@ -142,7 +142,7 @@ SpringloadAnalytics.setupTrackables({
 <!-- E.g. Use custom category and custom value only -->
 <a data-analytics="UI Elements||1" href="#">Show</a>
 
-<!-- E.g. Custom track a group of elements with custom category and action -->
+<!-- E.g. Custom track a group of elements with custom category and event -->
 <div data-analytics="Top navigation">
   <ul>
     <li><a href="/">Home</a></li>
@@ -154,11 +154,11 @@ SpringloadAnalytics.setupTrackables({
 
 ## Tracking dynamically
 
-You can track within a JavaScript file by calling the track method, just specify the action and pass the event data which will be sent to trackers:
+You can track within a JavaScript file by calling the track method, just specify the event and pass the event data which will be sent to trackers:
 
 ```javascript
-// Specify action and payload.
-SpringloadAnalytics.track(action, {
+// Specify event and payload.
+SpringloadAnalytics.track(event, {
   label,
   value,
   category,
@@ -166,7 +166,7 @@ SpringloadAnalytics.track(action, {
 
 // Specify the trackers that will receive the payload, by default it'll be sent to all tracker.
 SpringloadAnalytics.track(
-  action,
+  event,
   {
     label,
     data,
@@ -184,7 +184,7 @@ SpringloadAnalytics.setupTrackables({
   trackableAttribute: "google-analytics",
   trackableEvent: "mouseenter",
   separator: ":",
-  action: "hover read more",
+  event: "hover read more",
   payloadKeys: ["page", "section"],
   sendTo: ["google-analytics"], // Not specific it will send to all trackers
 });

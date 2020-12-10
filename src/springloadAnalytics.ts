@@ -18,7 +18,7 @@ type PageData = {
 };
 
 interface ISetupTackablesOptions {
-  action: string;
+  event: string;
   separator?: string;
   payloadKeys: Array<string>;
   trackableAttribute?: string;
@@ -26,7 +26,6 @@ interface ISetupTackablesOptions {
   sendTo?: Array<string>;
 }
 
-const DEFAULT_ACTION = 'click';
 const DEFAULT_SEPARATOR = '|';
 const DEFAULT_PAYLOAD_KEYS: string[] = [];
 const DEFAULT_TRACKABLE_ATTRIBUTE = 'analytics';
@@ -34,7 +33,6 @@ const DEFAULT_TRACKABLE_EVENT: keyof HTMLElementEventMap = 'click';
 const DEFAULT_ENABLED_PLUGINS = { all: true };
 
 let options: any = {
-  action: DEFAULT_ACTION,
   separator: DEFAULT_SEPARATOR,
   payloadKeys: DEFAULT_PAYLOAD_KEYS,
   trackableAttribute: DEFAULT_TRACKABLE_ATTRIBUTE,
@@ -58,7 +56,7 @@ function withAnalytics(callback: Function) {
  *
  * @param {Object} options
  * @property {string}  [options.category] - Name of event category.
- * @property {string}  [options.separator="|"] - The charactor used to separate the content of `data-analytics` attribute into tracking variables `category`, `action`, `label` and `value`
+ * @property {string}  [options.separator="|"] - The charactor used to separate the content of `data-analytics` attribute into tracking variables `category`, `event`, `label` and `value`
  * @property {boolean} [options.trackPerformance=true] - Toggle for tracking performance
  * @property {string}  [options.trackableAttribute="analytics"] - The attribute name following `data-` attached to the trackable elements.
  * @property {string}  [options.trackableEvent="click"] - The event need to be tracked on trackable elements.
@@ -82,16 +80,16 @@ export const init = ({
 /**
  * Track an analytics event. This will trigger track calls in google analytics.
  *
- * @param {string} action - Event action
+ * @param {string} event - Event name
  * @param {object} payload - Event data
  * @param {object} [sendTo] - Tracker list that will accept this event
  */
-export const track = (action: string, payload: any, sendTo?: Array<string>) => {
+export const track = (event: string, payload: any, sendTo?: Array<string>) => {
   const plugins = Array.isArray(sendTo)
     ? sendTo.reduce((acc, tracker) => ({ ...acc, [tracker]: true }), {})
     : { all: true };
   withAnalytics((analytics: AnalyticsInstance) => {
-    analytics.track(action, payload, { plugins });
+    analytics.track(event, payload, { plugins });
   });
 };
 
@@ -107,7 +105,7 @@ export const track = (action: string, payload: any, sendTo?: Array<string>) => {
  * @property {array}  [options.sendTo]
  */
 export const setupTrackables = ({
-  action,
+  event,
   separator = options.separator,
   payloadKeys,
   trackableAttribute = options.trackableAttribute,
@@ -130,7 +128,7 @@ export const setupTrackables = ({
       );
 
       on(el, trackableEvent, () => {
-        track(action, payload, sendTo);
+        track(event, payload, sendTo);
       });
     });
   }
@@ -192,14 +190,14 @@ const getElementTrackingData = (element: Element, attribute: string): string | n
  */
 const on = (
   element: Element,
-  event: keyof HTMLElementEventMap,
+  trackableEvent: keyof HTMLElementEventMap,
   callback: EventListenerOrEventListenerObject
 ) => {
   if ('addEventListener' in window) {
-    element.addEventListener(event, callback, false);
+    element.addEventListener(trackableEvent, callback, false);
   } else if ('attachEvent' in window) {
-    (<any>element).attachEvent('on' + event, callback);
+    (<any>element).attachEvent('on' + trackableEvent, callback);
   } else {
-    (element as any)['on' + event] = callback;
+    (element as any)['on' + trackableEvent] = callback;
   }
 };
