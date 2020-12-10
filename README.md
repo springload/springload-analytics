@@ -53,9 +53,9 @@ The built-in google analytics tracker now is replaced by manually passsing track
 Performance tracking is enabled by passing performancePlugin instance to `trackerPlugins` is initialization funciton argument, You can specific the trackers you would like the tracking data be sent to in `sendTo` otherwise the data will be sent to all trackers.
 
 ```javascript
-import SpringloadAnalytics, { performancePlugin } from "springload-analytics";
+import * as SpringloadAnalytics, { performancePlugin } from "springload-analytics";
 
-const analytics = SpringloadAnalytics({
+SpringloadAnalytics.init({
   trackerPlugins: [
     // ...other tracker plugins
     performancePlugin({
@@ -79,7 +79,7 @@ After initialization with config, the core API is exposed & ready for use in the
 | payloadKeys        | `[]`        | The property keys array that related to the values in the same sequence in trackable attribute separated by separator.                      |
 
 ```javascript
-const analytics = SpringloadAnalytics({
+SpringloadAnalytics.init({
   separator: ":"
   trackableAttribute: "sp-analytics",
   trackableEvent: "hover",
@@ -89,7 +89,7 @@ const analytics = SpringloadAnalytics({
 
 ### Page
 
-Trigger page view measurement calls in Google analytics. It's a equivalent to [`analytics.page`](https://github.com/DavidWells/analytics#analyticspage).
+Trigger page view measurement calls in Google analytics. 
 
 **Arguments:**
 
@@ -99,20 +99,20 @@ Trigger page view measurement calls in Google analytics. It's a equivalent to [`
 
 ```javascript
 // Basic page tracking
-analytics.page();
+SpringloadAnalytics.page();
 
 // Page tracking with page data overrides
-analytics.page({
+SpringloadAnalytics.page({
   url: "https://google.com",
 });
 
 // Fire callback with 1st, 2nd or 3rd argument
-analytics.page(() => {
+SpringloadAnalytics.page(() => {
   console.log("do this after page");
 });
 
 // Send pageview to only to specific analytic tools
-analytics.page({}, ["google-analytics"]);
+SpringloadAnalytics.page({}, ['google-ana']);
 ```
 
 ## Custom tracking
@@ -120,7 +120,7 @@ analytics.page({}, ["google-analytics"]);
 For more targeted tracking you can specify event data by populating the data-analytics attribute with pipe (|) separated values.
 
 ```javascript
-analytics.setupTrackables({
+SpringloadAnalytics.setupTrackables({
   action: "Link click",
   payloadKeys: ["category", "label", "value"],
 });
@@ -158,14 +158,14 @@ You can track within a JavaScript file by calling the track method, just specify
 
 ```javascript
 // Specify action and payload.
-analytics.track(action, {
+SpringloadAnalytics.track(action, {
   label,
   value,
   category,
 });
 
 // Specify the trackers that will receive the payload, by default it'll be sent to all tracker.
-analytics.track(
+SpringloadAnalytics.track(
   action,
   {
     label,
@@ -180,7 +180,7 @@ analytics.track(
 You can set up additional/alternative trackable elements on the fly by calling `setupTrackables`:
 
 ```javascript
-analytics.setupTrackables({
+SpringloadAnalytics.setupTrackables({
   trackableAttribute: "google-analytics",
   trackableEvent: "mouseenter",
   separator: ":",

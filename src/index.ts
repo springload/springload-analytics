@@ -1,2 +1,3 @@
 export * from './plugins';
-export * from './springload-analytics';
+export * from './springloadAnalytics';
+export { default as EventBoundary } from './EventBoundary';
