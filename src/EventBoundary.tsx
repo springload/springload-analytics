@@ -5,6 +5,7 @@ interface IEventBoundaryProps {
   triggerEvent?: string;
   eventName: string;
   payload: any;
+  disabled?: boolean;
   children: JSX.Element | JSX.Element[];
   sendTo?: string[];
 }
@@ -14,6 +15,7 @@ const EventBoundary = ({
   eventName,
   payload,
   sendTo,
+  disabled = false,
   children,
 }: IEventBoundaryProps): JSX.Element => {
   return (
@@ -29,7 +31,9 @@ const EventBoundary = ({
             (element.props as any)[eventPropName](event);
           }
           payload = typeof payload === 'function' ? payload() : payload;
-          track(eventName, payload, sendTo);
+          if (!disabled) {
+            track(eventName, payload, sendTo);
+          }
         };
         return React.cloneElement(element, { [eventPropName]: eventHandler });
       })}
