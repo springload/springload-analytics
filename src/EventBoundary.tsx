@@ -2,7 +2,7 @@ import React from 'react';
 import { track } from './springloadAnalytics';
 
 interface IEventBoundaryProps {
-  triggerEvent: string;
+  triggerEvent?: string;
   eventName: string;
   payload: any;
   children: JSX.Element | JSX.Element[];
@@ -10,7 +10,7 @@ interface IEventBoundaryProps {
 }
 
 const EventBoundary = ({
-  triggerEvent,
+  triggerEvent = 'click',
   eventName,
   payload,
   sendTo,
