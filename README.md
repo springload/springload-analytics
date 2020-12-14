@@ -14,9 +14,10 @@ yarn add @springload/springload-analytics
 ## Basic setup
 
 ```javascript
-import SpringloadAnalytics, { googleAnalyticsPlugin, tecPlugin } from "springload-analytics";
+import * as SpringloadAnalytics from "springload-analytics";
+const { googleAnalyticsPlugin, tecPlugin } = SpringloadAnalytics;
 
-const analytics = SpringloadAnalytics({
+SpringloadAnalytics.init({
   trackerPlugins: [
     googleAnalyticsPlugin({
       trackingId: "UA-12341131-6",
@@ -53,13 +54,14 @@ The built-in google analytics tracker now is replaced by manually passsing track
 Performance tracking is enabled by passing performancePlugin instance to `trackerPlugins` is initialization funciton argument, You can specific the trackers you would like the tracking data be sent to in `sendTo` otherwise the data will be sent to all trackers.
 
 ```javascript
-import * as SpringloadAnalytics, { performancePlugin } from "springload-analytics";
+import * as SpringloadAnalytics from 'springload-analytics';
+const { performancePlugin } = SpringloadAnalytics;
 
 SpringloadAnalytics.init({
   trackerPlugins: [
     // ...other tracker plugins
     performancePlugin({
-      sendTo: ["google-analytics"],
+      sendTo: ['google-analytics'],
     }),
   ],
 });
@@ -71,12 +73,14 @@ SpringloadAnalytics.init({
 
 After initialization with config, the core API is exposed & ready for use in the application.
 
-| Option             | Default     | Description                                                                                                                                 |
-| ------------------ | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| Option             | Default     | Description                                                                                                                                |
+| ------------------ | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| trackerPlugins     | '[]'        | The tracker plugins                                                                                                                        |
+| debug              | 'false'     | Whether open debug mode                                                                                                                    |
 | separator          | '&#x7c;'    | The charactor used to separate the content of `data-analytics` attribute into tracking variables `category`, `event`, `label` and `value`. |
-| trackableAttribute | 'analytics' | The attribute name following `data-` attached to the trackable elements.                                                                    |
-| trackableEvent     | 'click'     | The event need to be tracked on trackable elements.                                                                                         |
-| payloadKeys        | `[]`        | The property keys array that related to the values in the same sequence in trackable attribute separated by separator.                      |
+| trackableAttribute | 'analytics' | The attribute name following `data-` attached to the trackable elements.                                                                   |
+| trackableEvent     | 'click'     | The event need to be tracked on trackable elements.                                                                                        |
+| payloadKeys        | `[]`        | The property keys array that related to the values in the same sequence in trackable attribute separated by separator.                     |
 
 ```javascript
 SpringloadAnalytics.init({
@@ -89,7 +93,7 @@ SpringloadAnalytics.init({
 
 ### Page
 
-Trigger page view measurement calls in Google analytics. 
+Trigger page view measurement calls in Google analytics.
 
 **Arguments:**
 
@@ -103,12 +107,12 @@ SpringloadAnalytics.page();
 
 // Page tracking with page data overrides
 SpringloadAnalytics.page({
-  url: "https://google.com",
+  url: 'https://google.com',
 });
 
 // Fire callback with 1st, 2nd or 3rd argument
 SpringloadAnalytics.page(() => {
-  console.log("do this after page");
+  console.log('do this after page');
 });
 
 // Send pageview to only to specific analytic tools
@@ -121,8 +125,8 @@ For more targeted tracking you can specify event data by populating the data-ana
 
 ```javascript
 SpringloadAnalytics.setupTrackables({
-  event: "Link click",
-  payloadKeys: ["category", "label", "value"],
+  event: 'Link click',
+  payloadKeys: ['category', 'label', 'value'],
 });
 ```
 
@@ -171,7 +175,7 @@ SpringloadAnalytics.track(
     label,
     data,
   },
-  ["tec"]
+  ['tec']
 );
 ```
 
@@ -181,12 +185,12 @@ You can set up additional/alternative trackable elements on the fly by calling `
 
 ```javascript
 SpringloadAnalytics.setupTrackables({
-  trackableAttribute: "google-analytics",
-  trackableEvent: "mouseenter",
-  separator: ":",
-  event: "hover read more",
-  payloadKeys: ["page", "section"],
-  sendTo: ["google-analytics"], // Not specific it will send to all trackers
+  trackableAttribute: 'google-analytics',
+  trackableEvent: 'mouseenter',
+  separator: ':',
+  event: 'hover read more',
+  payloadKeys: ['page', 'section'],
+  sendTo: ['google-analytics'], // Not specific it will send to all trackers
 });
 ```
 
