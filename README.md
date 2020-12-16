@@ -75,7 +75,7 @@ After initialization with config, the core API is exposed & ready for use in the
 
 | Option             | Default     | Description                                                                                                                                |
 | ------------------ | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| trackerPlugins     | '[]'        | The tracker plugins                                                                                                                        |
+| trackerPlugins     | `[]`        | The tracker plugins                                                                                                                        |
 | debug              | 'false'     | Whether open debug mode                                                                                                                    |
 | separator          | '&#x7c;'    | The charactor used to separate the content of `data-analytics` attribute into tracking variables `category`, `event`, `label` and `value`. |
 | trackableAttribute | 'analytics' | The attribute name following `data-` attached to the trackable elements.                                                                   |
