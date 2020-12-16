@@ -121,7 +121,7 @@ SpringloadAnalytics.page({}, ['google-ana']);
 
 ## Custom tracking
 
-For more targeted tracking you can specify event data by populating the data-analytics attribute with pipe (|) separated values.
+Custom targeted tracking you can specify event data by populating the data-analytics attribute with pipe (|) separated values.
 
 ```javascript
 SpringloadAnalytics.setupTrackables({
