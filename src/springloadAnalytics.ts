@@ -72,7 +72,7 @@ export const init = ({
   options = { ...options, ...overrideOptions };
   analyInstance = Analytics({
     app: 'springload-analytics',
-    plugins: trackerPlugins,
+    plugins: trackerPlugins.filter(Boolean),
     debug,
   });
 };
